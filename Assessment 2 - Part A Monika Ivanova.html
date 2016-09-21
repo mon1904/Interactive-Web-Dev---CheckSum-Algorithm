@@ -1,0 +1,397 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>INSEE Checker</title>
+<h1>Monika Ivanova R00130358</h1>
+<script type="text/javascript">
+
+//////////// Your code goes below this line here  /////////
+///////////  Monika Ivanova
+
+//------------Credit Card-----------------
+function creditcardgood(card) 
+{
+
+var validCard = new Boolean(true);
+
+var cNumberTotal =0;
+
+if ((card == null) || (card == ""))
+	validCard = false;
+	
+if (card.length != 16)
+	validCard = false;
+	
+	//Check each digit. Even digits are *2 and odd ones are left alone.
+	for(i=0; i <card.length; i++)
+	{
+	number = parseInt(card.charAt(i), 10);
+	if ( i % 2 == 0)
+		{
+		digit = number * 2;
+		if(digit > 9)
+			{
+			digit = digit -9;
+			}
+		}
+		else
+			{
+			digit = number;
+			}
+	
+	cNumberTotal = cNumberTotal + digit;
+		
+	}
+	
+if (cNumberTotal % 10 != 0)
+	validCard = false;
+	
+	return validCard;
+}
+
+//------------EAN-13-----------------
+function eangood(ean)
+{
+var validEan = new Boolean(true);
+
+var total =0;
+
+if ((ean == null) || (ean ==""))
+	validEan = false;
+	
+if (ean.length != 13)
+	validEan = false;
+
+	for(i=0; i < ean.length; i++)
+		{
+		c = parseInt(ean.charAt(i), 10);
+		if(i % 2 == 1)
+			{
+			digit = c * 3; //odd 
+			}
+			else
+			{
+			digit = c; 
+			}
+		total = total + digit;
+		}
+
+if (total % 10 != 0)
+	validEan = false;
+	
+	return validEan;
+}
+
+//------------ISBN-10-----------------
+function isbngood(isb)
+{
+var validIsbn = new Boolean(true);
+var totalIsbn =0;
+var number = 0;
+var lastmod = 10;
+var lastLetter = isb.charAt(9);
+
+	if ((isb == null) || (isb == ""))
+		validEan = false;
+		
+	if (isb.length != 10)
+		validIsbn = false;
+		
+	
+	if ((lastLetter != "X") || (lastLetter != "x"))
+	{
+		number = lastLetter;
+	}
+
+	else 
+	{
+		number = 10;
+	}
+	
+	for (i = 0; i < isb.length; i++)
+	{	
+		num = parseInt(isb.charAt(i));	
+		digit = num * lastmod;
+		lastmod = lastmod - 1;					      
+		totalIsbn = totalIsbn + digit;
+	}
+		
+	if (totalIsbn % 11 != 0)
+		validIsbn = false;
+		
+return validIsbn;
+}
+//------------PESEL-----------------
+function peselgood(psl)
+{
+var validPsl = new Boolean(true);
+var totalPsl =0;
+var one = parseInt(psl.charAt(0))+ parseInt(psl.charAt(4))+ parseInt(psl.charAt(8))+parseInt(psl.charAt(10));
+var three = parseInt(psl.charAt(1))+parseInt(psl.charAt(5))+parseInt(psl.charAt(9));
+var seven = parseInt(psl.charAt(2))+parseInt(psl.charAt(6));
+var nine = parseInt(psl.charAt(3))+parseInt(psl.charAt(7));
+var month = psl.substring(2, 4);
+	
+
+	if ((psl == null) || (psl ==""))
+		validPsl = false;
+
+	if (psl.length != 11)
+		validPsl = false;
+
+	var m = 0;
+	m = parseInt(month);
+
+	
+	if(month >20)
+	{
+		month = month%20;
+	}
+	
+	if (month > 12)
+	{
+		validPsl = false;
+	}
+	
+	one = one *1;
+	three = three*3;
+	seven = seven*7;
+	nine = nine*9;
+	
+
+	totalPsl = one+three+seven+nine;
+
+	if (totalPsl % 10 != 0)
+	{
+		validPsl = false;
+	}
+
+
+return validPsl;
+}
+
+//-------------Henkilötunnus ----------------
+function henkilgood(henkil)
+{
+var valid = new Boolean(true);
+var henkilcopy = henkil; //copy of passed string
+
+
+var month = henkil.substring(3, 4);
+var date = henkil.slice(0,6);
+var ppp = henkil.slice(7,10);
+
+	
+
+	if (henkil.length != 11)
+	{
+		valid = false;
+	}
+	
+	var m = 0;
+	m=parseInt(month);
+	
+	if (month > 12)
+	{
+		valid = false;
+	}
+	
+	
+	//if 11 long check that position 6 is - and take it out
+	if(henkil.length ==11)
+	{
+		if((henkil.charAt(6) != "-") && (henkil.charAt(6) != "+") && (henkil.charAt(6) != "A")) //if character 6 is not one of them)
+		{
+			valid = false;
+		}
+		henkilcopy = date + ppp;
+	
+	
+		var number = 0;
+		number = parseInt(henkilcopy); // parse them into an long int number
+
+		var last = henkil.substring(10,11);
+		last = last.toUpperCase();
+
+		henkilmod = number % 31;
+		
+		var modmap = "0123456789ABCDEFHJKLMNPRSTUVWXY";
+		letter = modmap.charAt(henkilmod); 
+		
+		if(!(last == letter))
+		{
+			valid = false;
+		}
+	}
+	
+return valid;
+}
+
+
+
+
+//-------------Euro Banknotes (new & old)----------------
+function eurogood(x)
+{
+var valid = new Boolean(true);
+var letter = x.slice(0,1);
+letter = letter.toUpperCase();
+var total=0;
+var lArray = ".ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var xcopy;
+
+
+	if(!(letter >= "0") || (letter <= "9")) 
+	{ 
+		valid = false; 
+	}
+
+	if ((x == null) || (x == " "))
+		valid = false;
+	
+	if (x.length != 12)
+		valid = false;
+	
+	
+	xcopy = parseInt(lArray.indexOf(letter),10);
+	var eurosum = parseInt(x.substring(1,12)); 
+	total = xcopy + eurosum;
+	
+	if (total % 9 !== 8) 
+	{ 
+		valid = false;
+	}
+return valid;
+}
+
+
+
+////// your code goes above this line   //////////
+///// no need to change anything below this line !!//////
+
+
+
+function checkcc()
+{
+num = document.getElementById("creditcardfield").value
+if (creditcardgood(num))
+	{
+	document.getElementById("creditcardfield").style.background="#00ff00";
+	}
+else
+	{
+	document.getElementById("creditcardfield").style.background="#ff6666";
+	}
+}
+
+function checkean()
+{
+num = document.getElementById("eanfield").value
+if (eangood(num))
+	{
+	document.getElementById("eanfield").style.background="#00ff00";
+	}
+else
+	{
+	document.getElementById("eanfield").style.background="#ff6666";
+	}
+}
+
+
+function checkeuro()
+{
+num = document.getElementById("eurofield").value
+if (eurogood(num))
+	{
+	document.getElementById("eurofield").style.background="#00ff00";
+	}
+else
+	{
+	document.getElementById("eurofield").style.background="#ff6666";
+	}
+}
+
+function checkpesel()
+{
+num = document.getElementById("peselfield").value
+if (peselgood(num))
+	{
+	document.getElementById("peselfield").style.background="#00ff00";
+	}
+else
+	{
+	document.getElementById("peselfield").style.background="#ff6666";
+	}
+}
+
+
+function checksotu()
+{
+num = document.getElementById("sotufield").value
+if (henkilgood(num))
+	{
+	document.getElementById("sotufield").style.background="#00ff00";
+	}
+else
+	{
+	document.getElementById("sotufield").style.background="#ff6666";
+	}
+}
+
+function checkisbn()
+{
+num = document.getElementById("isbnfield").value
+if (isbngood(num))
+	{
+	document.getElementById("isbnfield").style.background="#00ff00";
+	}
+else
+	{
+	document.getElementById("isbnfield").style.background="#ff6666";
+	}
+}
+
+</script>
+
+
+</head>
+<body>
+<div>
+Check Sum Template
+
+
+
+<br/><br/>
+<form name="form">
+
+Credit Card: <input type="text" id="creditcardfield" value="4499228308017422" /> <button type="button" onclick="checkcc()">Check</button>
+<br/><br/>
+
+EAN: <input type="text" id="eanfield" value="5011073003503" /> <button type="button" onclick="checkean()">Check</button>
+<br/><br/>
+
+ISBN: <input type="text" id="isbnfield" value="1841593095" /> <button type="button" onclick="checkisbn()">Check</button>
+<br/><br/>
+
+Euro: <input type="text" id="eurofield" value="Z66162932541" /> <button type="button" onclick="checkeuro()">Check</button>
+<br/><br/>
+
+PESEL: <input type="text" id="peselfield" value="70051012347" /> <button type="button" onclick="checkpesel()">Check</button>
+<br/><br/>
+Henkilötunnus: <input type="text" id="sotufield" value="311280-999j" /> <button type="button" onclick="checksotu()">Check</button>
+<br/><br/>
+</form> 
+
+</div>
+
+
+<br/><br/>
+
+
+
+
+
+
+
+</html>
